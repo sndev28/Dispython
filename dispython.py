@@ -6,7 +6,7 @@
                                              #                                                                             #
                                              #                              DISPYTHON                                      #
                                              #                                                                             #
-                                             #                        VERSION CODE : 2.12.56                               #
+                                             #                        VERSION CODE : 2.13.12                               #
                                              #                                                                             #
                                              #                                                                             #
                                              #                                                                             #
@@ -42,6 +42,7 @@ async def run(ctx, client):
 
 
 @client.command()
+@commands.has_permissions(administrator = True)
 async def runcode(ctx):
 
 

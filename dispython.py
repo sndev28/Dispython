@@ -6,7 +6,7 @@
                                              #                                                                             #
                                              #                              DISPYTHON                                      #
                                              #                                                                             #
-                                             #                        VERSION CODE : 2.09.86                               #
+                                             #                        VERSION CODE : 2.11.37                               #
                                              #                                                                             #
                                              #                                                                             #
                                              #                                                                             #
@@ -31,13 +31,13 @@ global client
 client = commands.Bot(command_prefix = 'd!')
 
 
-async def run(ctx):
+async def run(ctx, client):
     try :
         importlib.reload(file)
-        await file.script(ctx)
+        await file.script(ctx, client)
 
     except Exception as err:
-        await ctx.send(str(err))
+        await ctx.send('```Error :\n' + str(err) + '```')
 
 
 
@@ -61,15 +61,19 @@ async def runcode(ctx):
 
     scriptlines = scriptres.content.split("\n")
 
-    scriptfunc = "async def script(ctx):\n"
+    scriptfunc = "async def script(ctx, client):\n    try:\n"
 
     for line in scriptlines:
-        scriptfunc = scriptfunc + "    " + line + "\n"
+        scriptfunc = scriptfunc + "        " + line + "\n"
+
+    scriptfunc = scriptfunc + "    except Exception as err:\n        await ctx.send(str(err))"
 
     with open('file.py', 'w') as file:
         file.write(scriptfunc)
 
-    asyncio.create_task(run(ctx))
+    await ctx.send("```Running :```\n")
+
+    asyncio.create_task(run(ctx,client))
 
 
 
@@ -81,4 +85,4 @@ async def on_ready():
 
 
 #BOT start
-client.run(os.getenv("TOKEN"))
+client.run(os.getenv('TOKEN'))

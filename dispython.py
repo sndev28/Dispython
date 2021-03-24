@@ -6,7 +6,7 @@
                                              #                                                                             #
                                              #                              DISPYTHON                                      #
                                              #                                                                             #
-                                             #                        VERSION CODE : 2.11.37                               #
+                                             #                        VERSION CODE : 2.12.56                               #
                                              #                                                                             #
                                              #                                                                             #
                                              #                                                                             #
@@ -50,7 +50,7 @@ async def runcode(ctx):
 
 
 
-    await ctx.send("`Enter the entire code you want to test:`")
+    await ctx.send("```Enter the entire code you want to test: (discord library and extensions are available by default. Import any other installed library you might need.)```")
 
     try:
         scriptres = await client.wait_for("message", check = check, timeout = 300.0)
@@ -59,9 +59,15 @@ async def runcode(ctx):
         await ctx.send("`TimeOut`")
         return
 
-    scriptlines = scriptres.content.split("\n")
+    if len(scriptres.attachments) != 0:
+        script = requests.get(scriptres.attachments[0].url).text
 
-    scriptfunc = "async def script(ctx, client):\n    try:\n"
+    else :
+        script = scriptres.content
+
+    scriptlines = script.split("\n")
+
+    scriptfunc = "import discord\nfrom discord.ext import commands\nasync def script(ctx, client):\n    try:\n"
 
     for line in scriptlines:
         scriptfunc = scriptfunc + "        " + line + "\n"
